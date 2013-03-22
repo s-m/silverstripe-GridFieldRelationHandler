@@ -2,12 +2,10 @@
 
 class GridFieldManyRelationHandler extends GridFieldRelationHandler implements GridField_DataManipulator {
 	protected $cheatList;
-	protected $cheatManyList;
 
 	public function __construct($useToggle = true, $segement = 'before') {
 		parent::__construct($useToggle, $segement);
 		$this->cheatList = new GridFieldManyRelationHandler_HasManyList;
-		$this->cheatManyList = new GridFieldManyRelationHandler_ManyManyList;
 	}
 
 	public function getColumnContent($gridField, $record, $columnName) {
@@ -50,9 +48,9 @@ class GridFieldManyRelationHandler extends GridFieldRelationHandler implements G
 		$list = new DataList($list->dataClass());
 		$list = $list->setDataQuery($query);
 		if($orgList instanceof ManyManyList) {
-			$joinTable = $this->cheatManyList->getJoinTable($orgList);
+			$joinTable = $orgList->getJoinTable();
 			$baseClass = ClassInfo::baseDataClass($list->dataClass());
-			$localKey = $this->cheatManyList->getLocalKey($orgList);
+			$localKey = $orgList->getLocalKey();
 			$query->leftJoin($joinTable, "\"$joinTable\".\"$localKey\" = \"$baseClass\".\"ID\"");
 			$list = $list->setDataQuery($query);
 		}
